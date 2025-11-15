@@ -1,94 +1,93 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { useState } from "react";
 import {
-  Menu,
-  X,
   Search,
   Filter,
   Bell,
   MessageSquare,
-  User,
   ChevronDown,
-  Briefcase,
+  LayoutDashboard,
+  Building,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Logo from "@/components/logo";
+import { useAuthContext } from "@/context/auth-provider";
 
-interface HeaderProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  userName?: string;
-}
-
-export default function Header({ sidebarOpen, setSidebarOpen, userName = "John Doe" }: HeaderProps) {
-  const pathname = usePathname();
-
-  // 🔹 Extract the last part of the path -> "resume"
-  const pageTitle = pathname
-    ?.split("/")
-    .filter(Boolean)
-    .pop()
-    ?.replace(/-/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase()) || "Dashboard";
+export default function RecruiterHeader() {
+  const { user, isLoading } = useAuthContext();
 
   return (
-    <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
-      <div className="flex items-center justify-between px-4 h-16">
-        {/* Left Section */}
-        <div className="flex items-center">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-md text-gray-500 hover:text-gray-700 focus:outline-none lg:hidden"
+    <header
+      className=" h-20 w-full bg-gradient-to-r from-blue-50 to-white
+      shadow-[0_2px_10px_rgb(0,0,0,0.12)] backdrop-blur-lg flex items-center
+      justify-between px-4 md:px-8 z-30"
+    >
+      {/* LEFT SECTION */}
+      <div className="flex items-center space-x-4 flex-shrink-0">
+        {/* Logo for mobile */}
+        <div className="flex md:hidden items-center space-x-2">
+          <Logo />
+          <span className="text-lg font-semibold text-blue-700">
+            Kasb Recruiter
+          </span>
+        </div>
+
+        {/* Dashboard info for desktop */}
+        <div className="hidden md:flex items-center space-x-4">
+          <div
+            className="flex items-center justify-center rounded-md
+            bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 shadow-md w-10 h-10"
           >
-            {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 ml-2 lg:ml-0">
-            <div className="w-8 h-8 bg-blue-600 shadow-md rounded-md flex items-center justify-center">
-              <Briefcase className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-semibold text-gray-900">JobMatch</span>
-          </Link>
-
-          {/* Page Title */}
-          <span className="ml-6 text-lg font-semibold text-gray-700">{pageTitle}</span>
-        </div>
-
-        {/* Search Bar (only visible on md+) */}
-        <div className="hidden md:flex items-center flex-1 max-w-xl mx-8">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input placeholder="Search..." className="pl-10 pr-10 py-2 w-full" />
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute right-1 top-1/2 -translate-y-1/2"
-            >
-              <Filter className="w-4 h-4" />
-            </Button>
+            <LayoutDashboard className="text-white w-6 h-6" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-semibold text-blue-700">
+              Recruiter Dashboard
+            </span>
+            <p className="text-sm text-blue-600">
+              Welcome back, {user?.name || "Recruiter"}
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Right Section */}
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-blue-600 rounded-full"></span>
+      {/* CENTER SECTION — SEARCH BAR */}
+      <div className="hidden md:flex flex-1 justify-center px-4">
+        <div className="relative w-full max-w-2xl">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-400 w-5 h-5" />
+          <Input
+            placeholder="Search candidates, jobs, or messages..."
+            className="pl-12 pr-12 py-2 w-full rounded-lg shadow-sm border border-blue-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-300"
+          />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-2 top-1/2 -translate-y-1/2"
+          >
+            <Filter className="w-4 h-4 text-blue-600" />
           </Button>
-          <Button variant="ghost" size="icon">
-            <MessageSquare className="w-5 h-5" />
-          </Button>
-          <div className="flex items-center space-x-2 cursor-pointer">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <User className="w-4 h-4 text-white" />
-            </div>
-            <span className="hidden md:inline text-sm font-medium">{userName}</span>
-            <ChevronDown className="w-4 h-4 text-gray-500" />
+        </div>
+      </div>
+
+      {/* RIGHT SECTION */}
+      <div className="hidden md:flex items-center space-x-2 md:space-x-3">
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="w-5 h-5 text-blue-600" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+        </Button>
+        <Button variant="ghost" size="icon">
+          <MessageSquare className="w-5 h-5 text-blue-600" />
+        </Button>
+
+        <div className="flex items-center space-x-2 cursor-pointer">
+          <div className="w-8 h-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 rounded-full flex items-center justify-center shadow-md transform hover:scale-105 transition-transform">
+            <Building className="w-4 h-4 text-white" />
           </div>
+          <span className="hidden md:inline text-sm font-medium text-blue-700">
+            {user?.name || "Company Name"}
+          </span>
+          <ChevronDown className="w-4 h-4 text-gray-500" />
         </div>
       </div>
     </header>

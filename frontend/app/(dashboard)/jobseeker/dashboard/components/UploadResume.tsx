@@ -19,8 +19,8 @@ export default function UploadResume() {
   const [file, setFile] = useState<File | null>(null);
   const router = useRouter();
 
-  const { user, resume, isLoading ,refetchResume } = useJobSeeker()
-  
+  const { profile, isLoading ,refetchProfile } = useJobSeeker()
+  if(isLoading)return <p>Loading...</p>
 
 
   const { mutate, isPending } = useMutation({
@@ -59,7 +59,7 @@ export default function UploadResume() {
        onSuccess: async() => {
          setFile(null);
          setOpen(false);
-         await refetchResume(); 
+         await refetchProfile(); 
          router.push("/jobseeker/profile");
 
     },
@@ -79,7 +79,7 @@ export default function UploadResume() {
         <div className="flex items-center space-x-3">
           <Upload className="w-5 h-5 text-green-600" />
           <div>
-            <p className="font-medium text-green-700">{user?.resumeParsed?"Update Your Resume":"Upload Your Resume"}</p>
+            <p className="font-medium text-green-700">{profile?.resumeParsed?"Update Your Resume":"Upload Your Resume"}</p>
             <p className="text-sm text-green-600">Get AI-powered ATS analysis</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function UploadResume() {
           className="w-24 bg-green-600 hover:bg-green-700 text-white"
           onClick={() => {setOpen(true); setFile(null)}}
         >
-          {user?.resumeParsed?"Update ":"Upload "}
+          {profile?.resumeParsed?"Update ":"Upload "}
         </Button>
       </motion.div>
 

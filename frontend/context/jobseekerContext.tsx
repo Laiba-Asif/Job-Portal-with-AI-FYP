@@ -1,56 +1,58 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getResume } from "@/app/api/jobseeker/api";
+import { getProfile } from "@/app/api/jobseeker/api";
 import { AxiosResponse } from "axios";
 
 // -----------------------------
-// API Response type
+// Profile Type
 // -----------------------------
-interface ResumeApiResponse {
-  user: any;
-  parsedResume: any;
+export interface JobseekerProfileType {
+  resumeFile: {
+    filename: string;
+    originalName: string;
+    fileUrl?: string;
+  };
+  parsedData: Record<string, any>; // raw parsed resume data
+  resumeParsed: boolean;
+  profileCompletion: number;
+  createdAt?: string;
+  updatedAt?: string;
+  _id?: string;
+  userId?: string;
 }
 
 // -----------------------------
-// Context type
+// Context Type
 // -----------------------------
 interface JobSeekerContextType {
-  user: any;
-  resume: any;
+  profile: JobseekerProfileType | null;
   isLoading: boolean;
-  refetchResume: () => void;
+  refetchProfile: () => void;
 }
 
-const JobSeekerContext = createContext<JobSeekerContextType | undefined>(
-  undefined
-);
+// -----------------------------
+// Context
+// -----------------------------
+const JobSeekerContext = createContext<JobSeekerContextType | undefined>(undefined);
 
-export const JobSeekerProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const {
-    data,
-    isLoading,
-    refetch: refetchResume,
-  } = useQuery<AxiosResponse<ResumeApiResponse>>({
-    queryKey: ["jobseeker"],
-    queryFn: getResume,
-    enabled: false,
+// -----------------------------
+// Provider
+// -----------------------------
+export const JobSeekerProvider = ({ children }: { children: ReactNode }) => {
+  const { data, isLoading, refetch } = useQuery<AxiosResponse<{ profile: JobseekerProfileType }>>({
+    queryKey: ["jobseeker-profile"],
+    queryFn: getProfile,
+    enabled: false, // manual fetch
   });
-
-  console.log(data)
 
   return (
     <JobSeekerContext.Provider
       value={{
-        user: data?.data?.user ?? null,
-        resume: data?.data?.parsedResume ?? null,
+        profile: data?.data?.profile ?? null, // get the inner profile object
         isLoading,
-        refetchResume,
+        refetchProfile: refetch,
       }}
     >
       {children}
@@ -58,10 +60,11 @@ export const JobSeekerProvider = ({
   );
 };
 
+// -----------------------------
+// Hook
+// -----------------------------
 export const useJobSeeker = () => {
   const context = useContext(JobSeekerContext);
-  if (!context) {
-    throw new Error("useJobSeeker must be used inside JobSeekerProvider");
-  }
+  if (!context) throw new Error("useJobSeeker must be used inside JobSeekerProvider");
   return context;
 };

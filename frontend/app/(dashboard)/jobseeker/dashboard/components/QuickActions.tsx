@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Inbox, RefreshCw, Save, Upload, AlertCircle, Star } from "lucide-react";
-import { useState } from "react";
+import { Inbox, AlertCircle, Star } from "lucide-react";
 import UploadResume from "./UploadResume";
+import Link from "next/link";
 
 export default function QuickActions() {
   return (
@@ -48,9 +48,11 @@ export default function QuickActions() {
                 <p className="text-sm text-purple-500">Add skills and experience details</p>
               </div>
             </div>
-            <Button size="sm" variant="outline" className="w-24 bg-purple-600 hover:bg-purple-700 text-white hover:text-white">
+            <Link href={'/jobseeker/profile'}>
+            <Button  size="sm" variant="outline" className="w-24 bg-purple-600 hover:bg-purple-700 text-white hover:text-white">
               Complete
             </Button>
+            </Link>
           </motion.div>
 
           <motion.div

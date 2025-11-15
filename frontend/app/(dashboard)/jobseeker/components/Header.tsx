@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
 import {
   Search,
   Filter,
@@ -14,24 +12,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/logo";
+import { useAuthContext } from "@/context/auth-provider";
 
 
 
-/**
- * A header component for the jobseeker dashboard.
- *
- * This component is responsible for rendering the top bar of the jobseeker
- * dashboard, which includes a search bar, a logo, and a user profile dropdown.
- *
- * @returns A JSX element representing the header component.
- */
 interface HeaderProp {
   title: string,
   description: string
 }
 export default function Header({title, description}: HeaderProp) {
-  const pathname = usePathname();
-
+  
+const {user, isLoading} = useAuthContext()
   return (
     <header
       className="fixed top-0 w-full h-20 bg-gradient-to-r from-blue-50 to-white
@@ -93,7 +84,7 @@ export default function Header({title, description}: HeaderProp) {
           <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-md transform hover:scale-105 transition-transform">
             <User className="w-4 h-4 text-white" />
           </div>
-          <span className="hidden md:inline text-sm font-medium text-blue-700">John Doe</span>
+          <span className="hidden md:inline text-sm font-medium text-blue-700">{user?.name}</span>
           <ChevronDown className="w-4 h-4 text-gray-500" />
         </div>
       </div>

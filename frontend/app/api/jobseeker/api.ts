@@ -10,4 +10,4 @@ export const ParseResume = async (resume: File) => {
 };
 
 
-export const getResume = async () => await API.get("/jobseeker/get-resume");
+export const getProfile = async () => await API.get("/jobseeker/get-profile");

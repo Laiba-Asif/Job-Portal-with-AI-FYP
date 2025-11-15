@@ -6,7 +6,7 @@ import { upload } from "../../middlewares/upload.middleware";
 
 const jobRoutes = Router()
 
-jobRoutes.get('/get-resume', jobseekerController.getResumeData)
+jobRoutes.get("/get-profile", jobseekerController.getProfileData);
 jobRoutes.post('/upload-resume',upload.single("resume"), jobseekerController.uploadResume)
 
 

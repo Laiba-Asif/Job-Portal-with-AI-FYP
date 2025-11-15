@@ -6,28 +6,22 @@ import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
 import { useJobSeeker } from "@/context/jobseekerContext";
 import ProfileSkeleton from "@/components/skeletons/profileSkeleton";
+import { useAuthContext } from "@/context/auth-provider";
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
+import Link from "next/link";
 
-interface ParsedResume {
-  data: {
-    seniority?: string;
-    job_title?: string;
-    skills?: string[];
-  };
-}
 
-interface ResumeWithParsed {
-  parsed?: ParsedResume;
-}
 
 export default function ProfileSummary() {
-  const { user, resume, isLoading } = useJobSeeker();
+  const { profile, isLoading } = useJobSeeker();
+  const {user}=useAuthContext()
 
   if (isLoading) {
     return <ProfileSkeleton />;
   }
 
   // Extend resume with parsed
-  const parsedResume = (resume as ResumeWithParsed)?.parsed;
+  const parsedResume = profile?.parsedData?.data;
 
   return (
     <Card className="bg-white border border-gray-100 shadow-sm rounded-2xl">
@@ -50,11 +44,11 @@ export default function ProfileSummary() {
               </div>
             </div>
             {/* Badge */}
-            {resume && (
+            {/* {resume && (
               <span className="absolute bottom-0 right-0 bg-gradient-to-tr from-blue-500 to-cyan-400 text-white text-xs rounded-full px-2 py-1 shadow">
                 90%
               </span>
-            )}
+            )} */}
           </div>
 
           <h3 className="mt-3 font-semibold text-gray-900">
@@ -76,9 +70,11 @@ export default function ProfileSummary() {
               <span className="text-sm font-medium text-gray-700">
                 Profile Completed
               </span>
+              <Link href={'/profile'}>
               <button className="text-xs font-semibold text-blue-600 hover:underline">
                 Complete Now
               </button>
+              </Link>
             </div>
             <Progress value={90} className="h-2 bg-blue-100" />
           </div>
@@ -99,9 +95,9 @@ export default function ProfileSummary() {
         {/* Skills */}
         <div>
           <h4 className="font-medium text-gray-800 mb-2">Top Skills</h4>
-          {parsedResume?.data?.skills?.length ? (
-            <div className="flex flex-wrap gap-2">
-              {parsedResume.data.skills.map((skill, index) => (
+          {parsedResume?.skills?.length ? (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {parsedResume.skills.map((skill: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
                 <span
                   key={index}
                   className="px-3 py-1.5 text-sm font-medium rounded-full
@@ -119,6 +115,7 @@ export default function ProfileSummary() {
           )}
         </div>
 
+          <Link href={'/profile'}>
         <Button
           onClick={() => {
             window.location.href = "/jobseeker/edit-profile";
@@ -129,6 +126,7 @@ export default function ProfileSummary() {
         >
           Edit Profile
         </Button>
+          </Link>
       </CardContent>
     </Card>
   );

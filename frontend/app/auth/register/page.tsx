@@ -178,6 +178,7 @@ const handleGoogleLogin = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
+                    autoComplete="off"
                     {...form.register("password")}
                     className="pr-10"
                   />
@@ -199,7 +200,7 @@ const handleGoogleLogin = () => {
               {/* Confirm Password */}
               <div className="space-y-1">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input id="confirmPassword" type="password" placeholder="••••••••" {...form.register("confirmPassword")} />
+                <Input id="confirmPassword" type="password" placeholder="••••••••" autoComplete="off" {...form.register("confirmPassword")} />
                 {form.formState.errors.confirmPassword && (
                   <p className="text-red-500 text-sm">{form.formState.errors.confirmPassword.message}</p>
                 )}

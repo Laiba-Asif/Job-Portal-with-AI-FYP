@@ -17,13 +17,13 @@ import Header from "../components/Header"
 import MetricCards from "./components/MetricCards"
 import QuickActions from "./components/QuickActions"
 import ProfileSummary from "./components/ProfileSummary"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getResume } from "@/app/api/jobseeker/api"
-import { useJobSeeker } from "@/context/jobseekerContext"
+import { useAuthContext } from "@/context/auth-provider"
+import Loading from "@/components/Loading"
 
 export default function JobSeekerDashboard() {
   
-const { user, resume, isLoading } = useJobSeeker()
+  const {user, isLoading} = useAuthContext()
+  if(isLoading) return <Loading/>
 
   const recommendedJobs = [
     {
@@ -187,7 +187,7 @@ const { user, resume, isLoading } = useJobSeeker()
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
       
-     <Header title="Dashboard" description="Welcome back, John!"/>
+     <Header title="Dashboard" description={`Welcome Back, ${user.name}`}/>
 
       
 

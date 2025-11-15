@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -40,10 +40,16 @@ import {
   Sliders,
 } from "lucide-react"
 import Link from "next/link"
+import Header from "../components/Header"
+import { useAuthContext } from "@/context/auth-provider"
+import MetricCards from "../components/MetricCard"
+import QuickActions from "../components/QuickActions"
 
 export default function ClientDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  const {user} = useAuthContext()
 
   const jobPostings = [
     {
@@ -206,293 +212,15 @@ export default function ClientDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
       {/* Top Navigation */}
-      <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
-        <div className="flex items-center justify-between px-4 h-16">
-          <div className="flex items-center">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-md text-gray-500 hover:text-gray-700 focus:outline-none lg:hidden"
-            >
-              {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-            <Link href="/" className="flex items-center space-x-2 ml-2 lg:ml-0">
-              <div className="w-8 h-8 bg-green-600 rounded-md flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold text-gray-900">JobMatch</span>
-            </Link>
-          </div>
-
-          <div className="hidden md:flex items-center flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input placeholder="Search candidates, jobs, messages..." className="pl-10 pr-10 py-2 w-full" />
-              <Button variant="ghost" size="sm" className="absolute right-1 top-1/2 transform -translate-y-1/2">
-                <Filter className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-green-600 rounded-full"></span>
-            </Button>
-            <Button variant="ghost" size="icon">
-              <MessageSquare className="w-5 h-5" />
-            </Button>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                <Building className="w-4 h-4 text-white" />
-              </div>
-              <span className="hidden md:inline text-sm font-medium">TechCorp Inc.</span>
-              <ChevronDown className="w-4 h-4 text-gray-500" />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-20 w-64 bg-white border-r border-gray-200 transition-transform transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 pt-16`}
-      >
-        <div className="h-full flex flex-col overflow-y-auto">
-          <div className="px-4 py-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <p className="text-sm font-medium text-gray-900">TechCorp Inc.</p>
-                <p className="text-xs text-gray-500">Enterprise Plan</p>
-              </div>
-              <Badge className="bg-green-100 text-green-800">Premium</Badge>
-            </div>
-          </div>
-
-          <nav className="flex-1 px-2 space-y-1">
-            <Link
-              href="/dashboard/client"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "dashboard"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("dashboard")}
-            >
-              <BarChart2 className="w-5 h-5 mr-3" />
-              Dashboard
-            </Link>
-            <Link
-              href="/dashboard/client/jobs"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "jobs"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("jobs")}
-            >
-              <Briefcase className="w-5 h-5 mr-3" />
-              Job Postings
-            </Link>
-            <Link
-              href="/dashboard/client/candidates"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "candidates"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("candidates")}
-            >
-              <Users className="w-5 h-5 mr-3" />
-              Candidates
-            </Link>
-            <Link
-              href="/dashboard/client/interviews"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "interviews"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("interviews")}
-            >
-              <Calendar className="w-5 h-5 mr-3" />
-              Interviews
-            </Link>
-            <Link
-              href="/dashboard/client/messages"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "messages"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("messages")}
-            >
-              <MessageSquare className="w-5 h-5 mr-3" />
-              Messages
-              <Badge className="ml-auto bg-green-100 text-green-800">5</Badge>
-            </Link>
-            <Link
-              href="/dashboard/client/analytics"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "analytics"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("analytics")}
-            >
-              <TrendingUp className="w-5 h-5 mr-3" />
-              Analytics
-            </Link>
-            <Link
-              href="/dashboard/client/team"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "team"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("team")}
-            >
-              <Users className="w-5 h-5 mr-3" />
-              Team
-            </Link>
-            <Link
-              href="/dashboard/client/settings"
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                activeTab === "settings"
-                  ? "bg-green-50 text-green-700"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("settings")}
-            >
-              <Settings className="w-5 h-5 mr-3" />
-              Settings
-            </Link>
-          </nav>
-
-          <div className="px-4 py-4 border-t border-gray-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <HelpCircle className="w-4 h-4 mr-2" />
-                Help & Support
-              </Button>
-            </div>
-            <Button variant="outline" size="sm" className="w-full justify-start bg-transparent">
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      </aside>
-
+      <Header />
       {/* Main Content */}
-      <main className={`pt-16 ${sidebarOpen ? "lg:pl-64" : ""} transition-all duration-300 min-h-screen`}>
+      <main className={`px-2 transition-all duration-300 min-h-screen`}>
         <div className="px-4 py-6 max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Recruitment Dashboard</h1>
-              <p className="text-gray-600">Manage your hiring process with AI-powered insights</p>
-            </div>
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              Post New Job
-            </Button>
-          </div>
+          {/* Stats */}
+          <MetricCards/>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Active Jobs</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.activeJobs}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <Briefcase className="w-5 h-5 text-green-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">{stats.openPositions} open positions</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Applications</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.totalApplications}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-blue-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-green-600 mt-2">+23% from last month</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Interviews</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.totalInterviews}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Video className="w-5 h-5 text-purple-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">3 scheduled today</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Hired</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.hired}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                    <UserCheck className="w-5 h-5 text-orange-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">This quarter</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Time to Hire</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.averageTimeToHire}</p>
-                  </div>
-                  <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-yellow-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-green-600 mt-2">-3 days from average</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-gray-200">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-medium text-gray-500">Conversion Rate</p>
-                    <p className="text-xl font-bold text-gray-900">8.2%</p>
-                  </div>
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-green-600 mt-2">+1.4% from last month</p>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Main Dashboard Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -680,29 +408,8 @@ export default function ClientDashboard() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Quick Actions */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold">Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white justify-start">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Post New Job
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Upload className="w-4 h-4 mr-2" />
-                    Import Candidates
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Download className="w-4 h-4 mr-2" />
-                    Export Reports
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start bg-transparent">
-                    <Sliders className="w-4 h-4 mr-2" />
-                    Configure AI Settings
-                  </Button>
-                </CardContent>
-              </Card>
+              <QuickActions/>
+             
 
               {/* Upcoming Interviews */}
               <Card className="bg-white border-gray-200">
@@ -760,119 +467,6 @@ export default function ClientDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Hiring Pipeline */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold">Hiring Pipeline</CardTitle>
-                  <CardDescription>Current recruitment funnel</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Applications</span>
-                      <span className="text-sm font-medium text-gray-900">156</span>
-                    </div>
-                    <Progress value={100} className="h-2" />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Screening</span>
-                      <span className="text-sm font-medium text-gray-900">98</span>
-                    </div>
-                    <Progress value={63} className="h-2" />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Interview</span>
-                      <span className="text-sm font-medium text-gray-900">45</span>
-                    </div>
-                    <Progress value={29} className="h-2" />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Assessment</span>
-                      <span className="text-sm font-medium text-gray-900">28</span>
-                    </div>
-                    <Progress value={18} className="h-2" />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Offer</span>
-                      <span className="text-sm font-medium text-gray-900">12</span>
-                    </div>
-                    <Progress value={8} className="h-2" />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Hired</span>
-                      <span className="text-sm font-medium text-gray-900">5</span>
-                    </div>
-                    <Progress value={3} className="h-2" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Recent Activity */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-900">
-                        <span className="font-medium">Sarah Chen</span> applied for{" "}
-                        <span className="font-medium">Full Stack Engineer</span>
-                      </p>
-                      <p className="text-xs text-gray-500">2 hours ago</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-900">
-                        <span className="font-medium">Alex Johnson</span> completed the technical assessment
-                      </p>
-                      <p className="text-xs text-gray-500">5 hours ago</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-yellow-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-900">
-                        Interview scheduled with <span className="font-medium">Michael Brown</span>
-                      </p>
-                      <p className="text-xs text-gray-500">Yesterday</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <MessageSquare className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-900">
-                        <span className="font-medium">Emily Davis</span> sent you a message
-                      </p>
-                      <p className="text-xs text-gray-500">Yesterday</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { BadRequestException } from "../../common/utils/catch-errors";
 import { HTTPSTATUS } from "../../config/http.config";
 import { asyncHandler } from "../../middlewares/asyncHandler";
 import { JobseekerService } from "./jobseeker.service";
@@ -25,8 +26,8 @@ export class JobseekerController {
       // If your authenticateJWT adds user to req.user, extract user id:
       const userId =
         (req as any).user?.id || (req as any).user?._id || undefined;
-
-      // const saved = await this.jobseekerService.uploadResume(file, userId);
+         if (!userId) throw new BadRequestException("User not authenticated");
+     
        await this.jobseekerService.uploadResume(file, userId);
       return res
         .status(HTTPSTATUS.OK)
@@ -34,15 +35,14 @@ export class JobseekerController {
     }
   );
 
- public getResumeData = asyncHandler(
+ public getProfileData = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const userId = (req as any).user?.id || (req as any).user?._id;
-
-    const { user, parsedResume } = await this.jobseekerService.getResumeData(userId);
+ if (!userId) throw new BadRequestException("User ID missing");
+    const profile = await this.jobseekerService.getProfileData(userId);
 
     return res.status(HTTPSTATUS.OK).json({
-      user,
-      parsedResume,
+      profile,
     });
   }
 );
