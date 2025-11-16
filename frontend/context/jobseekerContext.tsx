@@ -5,16 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/app/api/jobseeker/api";
 import { AxiosResponse } from "axios";
 
-// -----------------------------
-// Profile Type
-// -----------------------------
+
 export interface JobseekerProfileType {
   resumeFile: {
     filename: string;
     originalName: string;
     fileUrl?: string;
   };
-  parsedData: Record<string, any>; // raw parsed resume data
+  parsedData: Record<string, any>; 
   resumeParsed: boolean;
   profileCompletion: number;
   createdAt?: string;
@@ -23,23 +21,14 @@ export interface JobseekerProfileType {
   userId?: string;
 }
 
-// -----------------------------
-// Context Type
-// -----------------------------
 interface JobSeekerContextType {
   profile: JobseekerProfileType | null;
   isLoading: boolean;
   refetchProfile: () => void;
 }
 
-// -----------------------------
-// Context
-// -----------------------------
 const JobSeekerContext = createContext<JobSeekerContextType | undefined>(undefined);
 
-// -----------------------------
-// Provider
-// -----------------------------
 export const JobSeekerProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, refetch } = useQuery<AxiosResponse<{ profile: JobseekerProfileType }>>({
     queryKey: ["jobseeker-profile"],

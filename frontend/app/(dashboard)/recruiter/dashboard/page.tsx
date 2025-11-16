@@ -39,17 +39,13 @@ import {
   Trash2,
   Sliders,
 } from "lucide-react"
-import Link from "next/link"
 import Header from "../components/Header"
-import { useAuthContext } from "@/context/auth-provider"
 import MetricCards from "../components/MetricCard"
 import QuickActions from "../components/QuickActions"
+import ProfileSummary from "../components/ProfileSummary"
 
 export default function ClientDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-
-  const {user} = useAuthContext()
+  
 
   const jobPostings = [
     {
@@ -67,36 +63,7 @@ export default function ClientDashboard() {
       shortlisted: 8,
       interviewed: 3,
     },
-    {
-      id: 2,
-      title: "Product Manager",
-      department: "Product",
-      location: "Remote",
-      type: "Full-time",
-      posted: "1 week ago",
-      applications: 18,
-      views: 89,
-      status: "Active",
-      salary: "$130k - $160k",
-      qualified: 12,
-      shortlisted: 5,
-      interviewed: 2,
-    },
-    {
-      id: 3,
-      title: "UX Designer",
-      department: "Design",
-      location: "New York, NY",
-      type: "Contract",
-      posted: "3 days ago",
-      applications: 31,
-      views: 203,
-      status: "Active",
-      salary: "$90k - $110k",
-      qualified: 22,
-      shortlisted: 10,
-      interviewed: 4,
-    },
+    
   ]
 
   const candidates = [
@@ -114,62 +81,7 @@ export default function ClientDashboard() {
       education: "BS Computer Science, Stanford University",
       lastActive: "2 hours ago",
     },
-    {
-      id: 2,
-      name: "Sarah Chen",
-      title: "Full Stack Engineer",
-      experience: "4 years",
-      skills: ["React", "Python", "AWS"],
-      match: 88,
-      location: "Remote",
-      salary: "$125k",
-      status: "Under Review",
-      avatar: "/placeholder.svg?height=40&width=40",
-      education: "MS Software Engineering, MIT",
-      lastActive: "1 day ago",
-    },
-    {
-      id: 3,
-      name: "Michael Brown",
-      title: "Frontend Developer",
-      experience: "3 years",
-      skills: ["Vue.js", "JavaScript", "CSS"],
-      match: 82,
-      location: "Austin, TX",
-      salary: "$110k",
-      status: "New Application",
-      avatar: "/placeholder.svg?height=40&width=40",
-      education: "BA Computer Science, UT Austin",
-      lastActive: "3 days ago",
-    },
-    {
-      id: 4,
-      name: "Emily Davis",
-      title: "UI/UX Designer",
-      experience: "6 years",
-      skills: ["Figma", "Adobe XD", "Sketch"],
-      match: 79,
-      location: "New York, NY",
-      salary: "$120k",
-      status: "Shortlisted",
-      avatar: "/placeholder.svg?height=40&width=40",
-      education: "BFA Design, Parsons School of Design",
-      lastActive: "5 hours ago",
-    },
-    {
-      id: 5,
-      name: "David Wilson",
-      title: "Backend Developer",
-      experience: "7 years",
-      skills: ["Java", "Spring Boot", "PostgreSQL"],
-      match: 76,
-      location: "Chicago, IL",
-      salary: "$135k",
-      status: "New Application",
-      avatar: "/placeholder.svg?height=40&width=40",
-      education: "MS Computer Engineering, University of Illinois",
-      lastActive: "2 days ago",
-    },
+   
   ]
 
   const interviews = [
@@ -182,39 +94,14 @@ export default function ClientDashboard() {
       status: "Upcoming",
       notes: "Discuss previous experience with React and TypeScript",
     },
-    {
-      id: 2,
-      candidate: "Sarah Chen",
-      position: "Full Stack Engineer",
-      date: "Tomorrow, 10:00 AM",
-      type: "Phone Screen",
-      status: "Scheduled",
-      notes: "Initial screening to assess technical skills and experience",
-    },
-    {
-      id: 3,
-      candidate: "Michael Brown",
-      position: "Frontend Developer",
-      date: "Friday, 3:00 PM",
-      type: "In-Person",
-      status: "Confirmed",
-      notes: "Final round interview with the engineering team",
-    },
+    
   ]
 
-  const stats = {
-    activeJobs: 8,
-    totalApplications: 156,
-    totalInterviews: 12,
-    hired: 5,
-    averageTimeToHire: "18 days",
-    openPositions: 3,
-  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
-      {/* Top Navigation */}
-      <Header />
+      
       {/* Main Content */}
       <main className={`px-2 transition-all duration-300 min-h-screen`}>
         <div className="px-4 py-6 max-w-7xl mx-auto">
@@ -226,6 +113,7 @@ export default function ClientDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
+              <QuickActions/>
               {/* Active Job Postings */}
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
@@ -408,7 +296,7 @@ export default function ClientDashboard() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Quick Actions */}
-              <QuickActions/>
+              <ProfileSummary/>
              
 
               {/* Upcoming Interviews */}

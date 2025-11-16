@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Sidebar from "@/components/layout/Sidebar"; // your sidebar.tsx
-import { cn } from "@/lib/utils"; 
+import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/context/auth-provider";
+import { RecruiterProvider } from "@/context/recruiterContext";
+import Header from "./components/Header";
 
 export default function DashboardLayout({
   children,
@@ -12,13 +14,11 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuthContext();
- 
-
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <Sidebar role={user.role}/>
+      <Sidebar role={user.role} />
 
       {/* Main content area */}
       <div
@@ -28,7 +28,13 @@ export default function DashboardLayout({
         )}
       >
         {/* Children will include role-specific header + page content */}
-        <main className="flex-1">{children}</main>
+        <RecruiterProvider>
+         
+
+          <main className="flex-1 min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
+             <Header />
+            {children}</main>
+        </RecruiterProvider>
       </div>
     </div>
   );

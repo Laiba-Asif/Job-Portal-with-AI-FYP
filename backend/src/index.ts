@@ -15,6 +15,8 @@ import { authenticateJWT } from './common/strategies/jwt.strategy';
 import mfaRoutes from './modules/mfa/mfa.routes';
 import jobRoutes from './modules/jobseeker/jobseeker.routes';
 import userRoutes from './modules/user/user.route';
+import RecruiterRoutes from './modules/recruiter/recruiter.route';
+import JobRoutes from './modules/jobs/jobs.routes';
 
 
 const app = express()
@@ -44,18 +46,11 @@ app.use(`${BASE_PATH}/mfa`, mfaRoutes)
 
 app.use(`${BASE_PATH}/session`,authenticateJWT, sessionRoutes)
 app.use(`${BASE_PATH}/jobseeker`,authenticateJWT, jobRoutes)
-
-
-// this is how protected route is gonna be used
-// app.get("/admin/dashboard", authenticateJWT, authorizeRoles("admin"), (req, res) => {
-//   res.send("Welcome Admin");
-// });
-
+app.use(`${BASE_PATH}/recruiter`,authenticateJWT, RecruiterRoutes)
+app.use(`${BASE_PATH}/jobs`,authenticateJWT, JobRoutes)
 
 // error handler
 app.use(errorHandler)
-
-
 
 app.listen(config.PORT, async() => {
     console.log(`Server is running on port ${config.PORT} in ${config.NODE_ENV} mode`)

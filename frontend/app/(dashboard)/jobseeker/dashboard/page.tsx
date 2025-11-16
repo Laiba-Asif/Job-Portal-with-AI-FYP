@@ -1,9 +1,16 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   User,
   MapPin,
@@ -12,18 +19,17 @@ import {
   Heart,
   Send,
   DollarSign,
-} from "lucide-react"
-import Header from "../components/Header"
-import MetricCards from "./components/MetricCards"
-import QuickActions from "./components/QuickActions"
-import ProfileSummary from "./components/ProfileSummary"
-import { useAuthContext } from "@/context/auth-provider"
-import Loading from "@/components/Loading"
+} from "lucide-react";
+import Header from "../components/Header";
+import MetricCards from "./components/MetricCards";
+import QuickActions from "./components/QuickActions";
+import ProfileSummary from "./components/ProfileSummary";
+import { useAuthContext } from "@/context/auth-provider";
+import Loading from "@/components/Loading";
 
 export default function JobSeekerDashboard() {
-  
-  const {user, isLoading} = useAuthContext()
-  if(isLoading) return <Loading/>
+  const { user, isLoading } = useAuthContext();
+  if (isLoading) return <Loading />;
 
   const recommendedJobs = [
     {
@@ -37,8 +43,13 @@ export default function JobSeekerDashboard() {
       match: 95,
       skills: ["React", "TypeScript", "Next.js"],
       applied: false,
-      description: "We're looking for an experienced Frontend Developer to join our team...",
-      requirements: ["5+ years of experience", "Strong JavaScript skills", "Experience with React"],
+      description:
+        "We're looking for an experienced Frontend Developer to join our team...",
+      requirements: [
+        "5+ years of experience",
+        "Strong JavaScript skills",
+        "Experience with React",
+      ],
     },
     {
       id: 2,
@@ -52,7 +63,11 @@ export default function JobSeekerDashboard() {
       skills: ["Node.js", "React", "MongoDB"],
       applied: false,
       description: "Join our fast-growing startup as a Full Stack Engineer...",
-      requirements: ["3+ years of experience", "Node.js and React", "Database experience"],
+      requirements: [
+        "3+ years of experience",
+        "Node.js and React",
+        "Database experience",
+      ],
     },
     {
       id: 3,
@@ -65,8 +80,13 @@ export default function JobSeekerDashboard() {
       match: 82,
       skills: ["Figma", "React", "CSS"],
       applied: true,
-      description: "Looking for a talented UI/UX Developer to create beautiful interfaces...",
-      requirements: ["3+ years of experience", "Strong design skills", "Frontend development"],
+      description:
+        "Looking for a talented UI/UX Developer to create beautiful interfaces...",
+      requirements: [
+        "3+ years of experience",
+        "Strong design skills",
+        "Frontend development",
+      ],
     },
     {
       id: 4,
@@ -79,8 +99,13 @@ export default function JobSeekerDashboard() {
       match: 79,
       skills: ["Java", "Spring Boot", "PostgreSQL"],
       applied: false,
-      description: "Join our backend team to build scalable enterprise solutions...",
-      requirements: ["4+ years of experience", "Java expertise", "Database design"],
+      description:
+        "Join our backend team to build scalable enterprise solutions...",
+      requirements: [
+        "4+ years of experience",
+        "Java expertise",
+        "Database design",
+      ],
     },
     {
       id: 5,
@@ -94,9 +119,13 @@ export default function JobSeekerDashboard() {
       skills: ["AWS", "Docker", "Kubernetes"],
       applied: false,
       description: "Help us build and maintain our cloud infrastructure...",
-      requirements: ["3+ years of experience", "AWS certification", "CI/CD pipeline experience"],
+      requirements: [
+        "3+ years of experience",
+        "AWS certification",
+        "CI/CD pipeline experience",
+      ],
     },
-  ]
+  ];
 
   const applications = [
     {
@@ -154,14 +183,15 @@ export default function JobSeekerDashboard() {
       location: "Seattle, WA",
       salary: "$160k - $190k",
     },
-  ]
+  ];
 
   const messages = [
     {
       id: 1,
       sender: "Sarah Johnson",
       role: "HR Manager at TechCorp",
-      message: "Hi John, we'd like to schedule an interview for the Senior Frontend Developer position.",
+      message:
+        "Hi John, we'd like to schedule an interview for the Senior Frontend Developer position.",
       time: "2 hours ago",
       unread: true,
     },
@@ -169,7 +199,8 @@ export default function JobSeekerDashboard() {
       id: 2,
       sender: "Mike Chen",
       role: "Recruiter at StartupXYZ",
-      message: "Thanks for your application! Do you have time for a quick call this week?",
+      message:
+        "Thanks for your application! Do you have time for a quick call this week?",
       time: "Yesterday",
       unread: false,
     },
@@ -177,28 +208,22 @@ export default function JobSeekerDashboard() {
       id: 3,
       sender: "Emily Davis",
       role: "CTO at Design Studio",
-      message: "We've reviewed your portfolio and would like to discuss the UI/UX Developer role.",
+      message:
+        "We've reviewed your portfolio and would like to discuss the UI/UX Developer role.",
       time: "2 days ago",
       unread: false,
     },
-  ]
-
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
-      
-     <Header title="Dashboard" description={`Welcome Back, ${user.name}`}/>
-
-      
+      <Header title="Dashboard" description={`Welcome Back, ${user.name}`} />
 
       {/* Main Content */}
       <main className={`pt-24  transition-all duration-300 min-h-screen`}>
         <div className="px-10 py-6 max-w-8xl mx-auto">
-         
-          
           {/* Stats Cards */}
           <MetricCards />
-         
 
           {/* Main Dashboard Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -211,8 +236,12 @@ export default function JobSeekerDashboard() {
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">Recommended Jobs</CardTitle>
-                    <CardDescription>AI-matched opportunities based on your profile</CardDescription>
+                    <CardTitle className="text-lg font-semibold">
+                      Recommended Jobs
+                    </CardTitle>
+                    <CardDescription>
+                      AI-matched opportunities based on your profile
+                    </CardDescription>
                   </div>
                   <Button variant="outline" size="sm">
                     View All
@@ -226,7 +255,9 @@ export default function JobSeekerDashboard() {
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">{job.title}</h3>
+                          <h3 className="font-semibold text-gray-900 mb-1">
+                            {job.title}
+                          </h3>
                           <p className="text-gray-600 mb-2">{job.company}</p>
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
                             <span className="flex items-center">
@@ -243,12 +274,18 @@ export default function JobSeekerDashboard() {
                             </span>
                           </div>
                         </div>
-                        <Badge className="bg-green-100 text-green-800 font-medium">{job.match}% match</Badge>
+                        <Badge className="bg-green-100 text-green-800 font-medium">
+                          {job.match}% match
+                        </Badge>
                       </div>
 
                       <div className="flex flex-wrap gap-2 mt-3 mb-3">
                         {job.skills.map((skill) => (
-                          <Badge key={skill} variant="secondary" className="text-xs bg-gray-100 text-gray-800">
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className="text-xs bg-gray-100 text-gray-800"
+                          >
                             {skill}
                           </Badge>
                         ))}
@@ -266,9 +303,14 @@ export default function JobSeekerDashboard() {
                             <Eye className="w-4 h-4" />
                           </Button>
                           {job.applied ? (
-                            <Badge className="bg-blue-100 text-blue-800">Applied</Badge>
+                            <Badge className="bg-blue-100 text-blue-800">
+                              Applied
+                            </Badge>
                           ) : (
-                            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
                               <Send className="w-4 h-4 mr-1" />
                               Apply
                             </Button>
@@ -289,8 +331,12 @@ export default function JobSeekerDashboard() {
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">Application Status</CardTitle>
-                    <CardDescription>Track your job applications</CardDescription>
+                    <CardTitle className="text-lg font-semibold">
+                      Application Status
+                    </CardTitle>
+                    <CardDescription>
+                      Track your job applications
+                    </CardDescription>
                   </div>
                   <Button variant="outline" size="sm">
                     View All
@@ -303,11 +349,15 @@ export default function JobSeekerDashboard() {
                       className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
                     >
                       <div className="flex items-start space-x-3">
-                        <div className={`w-3 h-3 rounded-full mt-1.5 ${app.statusColor}`}></div>
+                        <div
+                          className={`w-3 h-3 rounded-full mt-1.5 ${app.statusColor}`}
+                        ></div>
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-gray-900">{app.title}</h3>
+                              <h3 className="font-semibold text-gray-900">
+                                {app.title}
+                              </h3>
                               <p className="text-gray-600">{app.company}</p>
                               <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1">
                                 <span className="flex items-center">
@@ -326,21 +376,24 @@ export default function JobSeekerDashboard() {
                                   app.status === "Interview Scheduled"
                                     ? "bg-blue-100 text-blue-800"
                                     : app.status === "Under Review"
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : app.status === "Rejected"
-                                        ? "bg-red-100 text-red-800"
-                                        : app.status === "Technical Test"
-                                          ? "bg-purple-100 text-purple-800"
-                                          : "bg-green-100 text-green-800"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : app.status === "Rejected"
+                                    ? "bg-red-100 text-red-800"
+                                    : app.status === "Technical Test"
+                                    ? "bg-purple-100 text-purple-800"
+                                    : "bg-green-100 text-green-800"
                                 }
                               >
                                 {app.status}
                               </Badge>
-                              <p className="text-xs text-gray-500 mt-1">Applied {app.appliedDate}</p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                Applied {app.appliedDate}
+                              </p>
                             </div>
                           </div>
                           <p className="text-sm text-gray-600 mt-2">
-                            <span className="font-medium">Next step:</span> {app.nextStep}
+                            <span className="font-medium">Next step:</span>{" "}
+                            {app.nextStep}
                           </p>
                         </div>
                       </div>
@@ -358,14 +411,18 @@ export default function JobSeekerDashboard() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Profile Summary */}
-              
-              <ProfileSummary/>
+
+              <ProfileSummary />
               {/* Messages */}
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">Recent Messages</CardTitle>
-                    <CardDescription>Stay in touch with recruiters</CardDescription>
+                    <CardTitle className="text-lg font-semibold">
+                      Recent Messages
+                    </CardTitle>
+                    <CardDescription>
+                      Stay in touch with recruiters
+                    </CardDescription>
                   </div>
                   <Button variant="outline" size="sm">
                     View All
@@ -376,7 +433,9 @@ export default function JobSeekerDashboard() {
                     <div
                       key={message.id}
                       className={`p-3 rounded-lg ${
-                        message.unread ? "bg-green-50 border border-green-100" : "border border-gray-200"
+                        message.unread
+                          ? "bg-green-50 border border-green-100"
+                          : "border border-gray-200"
                       }`}
                     >
                       <div className="flex items-start space-x-3">
@@ -385,11 +444,19 @@ export default function JobSeekerDashboard() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between">
-                            <p className="font-medium text-gray-900 truncate">{message.sender}</p>
-                            <p className="text-xs text-gray-500">{message.time}</p>
+                            <p className="font-medium text-gray-900 truncate">
+                              {message.sender}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {message.time}
+                            </p>
                           </div>
-                          <p className="text-xs text-gray-600">{message.role}</p>
-                          <p className="text-sm text-gray-700 mt-1 line-clamp-2">{message.message}</p>
+                          <p className="text-xs text-gray-600">
+                            {message.role}
+                          </p>
+                          <p className="text-sm text-gray-700 mt-1 line-clamp-2">
+                            {message.message}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -405,23 +472,36 @@ export default function JobSeekerDashboard() {
               {/* Upcoming Interviews */}
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold">Upcoming Interviews</CardTitle>
+                  <CardTitle className="text-lg font-semibold">
+                    Upcoming Interviews
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-blue-100 text-blue-800">Today, 2:00 PM</Badge>
+                      <Badge className="bg-blue-100 text-blue-800">
+                        Today, 2:00 PM
+                      </Badge>
                       <Badge variant="outline" className="text-xs">
                         Video Call
                       </Badge>
                     </div>
-                    <h4 className="font-medium text-gray-900">Senior Frontend Developer</h4>
+                    <h4 className="font-medium text-gray-900">
+                      Senior Frontend Developer
+                    </h4>
                     <p className="text-sm text-gray-600">TechCorp Inc.</p>
                     <div className="flex items-center justify-between mt-3">
-                      <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs bg-transparent"
+                      >
                         View Details
                       </Button>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white text-xs">
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                      >
                         Join Call
                       </Button>
                     </div>
@@ -429,18 +509,30 @@ export default function JobSeekerDashboard() {
 
                   <div className="p-3 border border-gray-200 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-gray-100 text-gray-800">Tomorrow, 10:00 AM</Badge>
+                      <Badge className="bg-gray-100 text-gray-800">
+                        Tomorrow, 10:00 AM
+                      </Badge>
                       <Badge variant="outline" className="text-xs">
                         Phone Screen
                       </Badge>
                     </div>
-                    <h4 className="font-medium text-gray-900">Full Stack Engineer</h4>
+                    <h4 className="font-medium text-gray-900">
+                      Full Stack Engineer
+                    </h4>
                     <p className="text-sm text-gray-600">StartupXYZ</p>
                     <div className="flex items-center justify-between mt-3">
-                      <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs bg-transparent"
+                      >
                         View Details
                       </Button>
-                      <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs bg-transparent"
+                      >
                         Prepare
                       </Button>
                     </div>
@@ -452,5 +544,5 @@ export default function JobSeekerDashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }
