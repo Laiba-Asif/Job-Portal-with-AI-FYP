@@ -65,7 +65,13 @@ const JobFormModal = forwardRef<JobFormModalHandle, JobFormModalProps>(
           reset({
             title: job.title,
             role: job.role,
-            jobType: job.jobType,
+            jobType: job.jobType as
+              | "Full-time"
+              | "Part-time"
+              | "Internship"
+              | "Contract"
+              | "Remote"
+              | "Hybrid",
             experienceLevel: job.experienceLevel,
             location: job.location,
             requiredSkills: job.requiredSkills || [],
@@ -198,7 +204,7 @@ const JobFormModal = forwardRef<JobFormModalHandle, JobFormModalProps>(
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded"
+              className="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-400  text-white py-2 rounded"
             >
               {job ? "Update Job" : "Create Job"}
             </button>
