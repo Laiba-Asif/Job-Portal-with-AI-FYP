@@ -26,9 +26,10 @@ import QuickActions from "./components/QuickActions";
 import ProfileSummary from "./components/ProfileSummary";
 import { useAuthContext } from "@/context/auth-provider";
 import Loading from "@/components/Loading";
+import JobRecommendations from "../components/RecommendedJobs";
 
 export default function JobSeekerDashboard() {
-  const { user, isLoading } = useAuthContext();
+  const {  isLoading } = useAuthContext();
   if (isLoading) return <Loading />;
 
   const recommendedJobs = [
@@ -185,39 +186,9 @@ export default function JobSeekerDashboard() {
     },
   ];
 
-  const messages = [
-    {
-      id: 1,
-      sender: "Sarah Johnson",
-      role: "HR Manager at TechCorp",
-      message:
-        "Hi John, we'd like to schedule an interview for the Senior Frontend Developer position.",
-      time: "2 hours ago",
-      unread: true,
-    },
-    {
-      id: 2,
-      sender: "Mike Chen",
-      role: "Recruiter at StartupXYZ",
-      message:
-        "Thanks for your application! Do you have time for a quick call this week?",
-      time: "Yesterday",
-      unread: false,
-    },
-    {
-      id: 3,
-      sender: "Emily Davis",
-      role: "CTO at Design Studio",
-      message:
-        "We've reviewed your portfolio and would like to discuss the UI/UX Developer role.",
-      time: "2 days ago",
-      unread: false,
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
-      <Header title="Dashboard" description={`Welcome Back, ${user.name}`} />
+   
 
       {/* Main Content */}
       <main className={`pt-24  transition-all duration-300 min-h-screen`}>
@@ -248,7 +219,7 @@ export default function JobSeekerDashboard() {
                   </Button>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {recommendedJobs.slice(0, 3).map((job) => (
+                  {/* {recommendedJobs.slice(0, 3).map((job) => (
                     <div
                       key={job.id}
                       className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
@@ -318,7 +289,8 @@ export default function JobSeekerDashboard() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
+                  <JobRecommendations dashboard={true} />
                 </CardContent>
                 <CardFooter className="border-t border-gray-200 p-4">
                   <Button variant="outline" className="w-full bg-transparent">
@@ -410,135 +382,7 @@ export default function JobSeekerDashboard() {
 
             {/* Right Column */}
             <div className="space-y-6">
-              {/* Profile Summary */}
-
               <ProfileSummary />
-              {/* Messages */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-lg font-semibold">
-                      Recent Messages
-                    </CardTitle>
-                    <CardDescription>
-                      Stay in touch with recruiters
-                    </CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    View All
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`p-3 rounded-lg ${
-                        message.unread
-                          ? "bg-green-50 border border-green-100"
-                          : "border border-gray-200"
-                      }`}
-                    >
-                      <div className="flex items-start space-x-3">
-                        <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                          <User className="w-5 h-5 text-gray-600" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
-                            <p className="font-medium text-gray-900 truncate">
-                              {message.sender}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {message.time}
-                            </p>
-                          </div>
-                          <p className="text-xs text-gray-600">
-                            {message.role}
-                          </p>
-                          <p className="text-sm text-gray-700 mt-1 line-clamp-2">
-                            {message.message}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-                <CardFooter className="border-t border-gray-200 p-4">
-                  <Button variant="outline" className="w-full bg-transparent">
-                    View All Messages
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              {/* Upcoming Interviews */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold">
-                    Upcoming Interviews
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-blue-100 text-blue-800">
-                        Today, 2:00 PM
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        Video Call
-                      </Badge>
-                    </div>
-                    <h4 className="font-medium text-gray-900">
-                      Senior Frontend Developer
-                    </h4>
-                    <p className="text-sm text-gray-600">TechCorp Inc.</p>
-                    <div className="flex items-center justify-between mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-xs bg-transparent"
-                      >
-                        View Details
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-white text-xs"
-                      >
-                        Join Call
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="p-3 border border-gray-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-gray-100 text-gray-800">
-                        Tomorrow, 10:00 AM
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        Phone Screen
-                      </Badge>
-                    </div>
-                    <h4 className="font-medium text-gray-900">
-                      Full Stack Engineer
-                    </h4>
-                    <p className="text-sm text-gray-600">StartupXYZ</p>
-                    <div className="flex items-center justify-between mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-xs bg-transparent"
-                      >
-                        View Details
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-xs bg-transparent"
-                      >
-                        Prepare
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>

@@ -1,6 +1,11 @@
+import axios from "axios";
 import { BadRequestException, NotFoundException } from "../../common/utils/catch-errors";
+import { config } from "../../config/app.config";
+import JobModel from "../../database/models/JobPost.model";
+import JobseekerProfileModel from "../../database/models/JobseekerProfileModel";
 import RecruiterProfileModel, { IRecruiterProfile } from "../../database/models/RecruiterProfile.model";
 import UserModel from "../../database/models/user.model";
+import { Types } from "mongoose";
 
 export class RecruiterService {
   // -------------------- GET PROFILE --------------------
@@ -13,8 +18,6 @@ export class RecruiterService {
     return profile;
   }
 
-  // -------------------- CREATE / POST PROFILE --------------------
- // -------------------- CREATE PROFILE ONLY ONCE --------------------
  public async postProfileData(userId: string, body: Partial<IRecruiterProfile>) {
   if (!userId) throw new BadRequestException("User ID missing");
 
@@ -101,5 +104,57 @@ export class RecruiterService {
     );
 
     return updatedProfile;
+  }
+
+  // ai based candidates recommendation
+
+  public async getCandidates(recruiterId: string) {
+    if (!recruiterId) throw new BadRequestException("User ID missing");
+    const jobs = await JobModel.find({ recruiterId: recruiterId, status: "published" });
+     if (!jobs || jobs.length === 0) {
+      throw new BadRequestException("Recruiter has no posted jobs.");
+    }
+
+     const jobBlocks = jobs.map(job => ({
+      jobId: job._id.toString(),
+      title: job.title,
+      text: `
+        Title: ${job.title}
+        Description: ${job.description}
+        Required Skills: ${job.requiredSkills?.join(", ") || ""}
+        Skills: ${job.skills?.join(", ") || ""}
+      `,
+      skills: job.requiredSkills ?? []
+    }));
+
+    const jobseekers = await JobseekerProfileModel.find({ resumeParsed: true });
+
+    const seekerBlocks = jobseekers.map(profile => ({
+      seekerId: profile.userId,
+      skills: profile.parsedData?.skills || [],
+      resumeText: JSON.stringify(profile.parsedData || {})
+    }));
+
+    const AI_URL = config.PARSER_URL;
+    const PARSER_API_KEY = config.PARSER_API_KEY;
+
+    const response = await axios.post(
+      `${AI_URL}/match-candidates`,
+      { jobs: jobBlocks, jobseekers: seekerBlocks },
+      { headers: { "x-api-key": PARSER_API_KEY } }
+    );
+
+    const scores = response.data; // { jobId, seekerId, score }
+
+    // Attach jobseeker details
+    const finalResults = scores.map((item: { seekerId: Types.ObjectId; }) => {
+      const seeker = jobseekers.find(s => s.userId === item.seekerId);
+      return {
+        ...item,
+        seekerProfile: seeker ? seeker.toObject() : null
+      };
+    });
+
+    return finalResults;
   }
 }

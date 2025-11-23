@@ -1,5 +1,4 @@
 "use client"
-import { JobSeekerProvider } from "@/context/jobseekerContext";
 import Header from "./components/Header";
 import { useAuthContext } from "@/context/auth-provider";
 import Sidebar from "@/components/layout/Sidebar";
@@ -11,7 +10,6 @@ export default function JobSeekerLayout({ children }: { children: React.ReactNod
   const { user } = useAuthContext();
 
   return (
-    <JobSeekerProvider>
       <div className="flex h-screen bg-gray-50">
         {/* Sidebar */}
         <Sidebar role={user.role}  />
@@ -20,6 +18,7 @@ export default function JobSeekerLayout({ children }: { children: React.ReactNod
         <div
           className={cn(
             "flex flex-col flex-1 min-w-0 transition-all duration-300 lg:ml-64",
+            
           )}
         >
           <main className="flex-1 min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
@@ -28,6 +27,5 @@ export default function JobSeekerLayout({ children }: { children: React.ReactNod
           </main>
         </div>
       </div>
-    </JobSeekerProvider>
   );
 }

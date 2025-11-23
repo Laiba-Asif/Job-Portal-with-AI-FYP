@@ -43,12 +43,6 @@ export default function ProfileSummary() {
                 </div>
               </div>
             </div>
-            {/* Badge */}
-            {/* {resume && (
-              <span className="absolute bottom-0 right-0 bg-gradient-to-tr from-blue-500 to-cyan-400 text-white text-xs rounded-full px-2 py-1 shadow">
-                90%
-              </span>
-            )} */}
           </div>
 
           <h3 className="mt-3 font-semibold text-gray-900">
@@ -70,7 +64,7 @@ export default function ProfileSummary() {
               <span className="text-sm font-medium text-gray-700">
                 Profile Completed
               </span>
-              <Link href={'/profile'}>
+              <Link href={'/jobseeker/profile'}>
               <button className="text-xs font-semibold text-blue-600 hover:underline">
                 Complete Now
               </button>

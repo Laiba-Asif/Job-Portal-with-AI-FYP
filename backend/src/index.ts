@@ -17,6 +17,7 @@ import jobRoutes from './modules/jobseeker/jobseeker.routes';
 import userRoutes from './modules/user/user.route';
 import RecruiterRoutes from './modules/recruiter/recruiter.route';
 import JobRoutes from './modules/jobs/jobs.routes';
+import jobreccomendationRoutes from './modules/jobrecommendation/jobreccomendation.route';
 
 
 const app = express()
@@ -48,6 +49,7 @@ app.use(`${BASE_PATH}/session`,authenticateJWT, sessionRoutes)
 app.use(`${BASE_PATH}/jobseeker`,authenticateJWT, jobRoutes)
 app.use(`${BASE_PATH}/recruiter`,authenticateJWT, RecruiterRoutes)
 app.use(`${BASE_PATH}/jobs`,authenticateJWT, JobRoutes)
+app.use(`${BASE_PATH}/recommendations`,authenticateJWT, jobreccomendationRoutes)
 
 // error handler
 app.use(errorHandler)

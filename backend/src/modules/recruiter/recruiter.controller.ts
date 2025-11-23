@@ -51,5 +51,19 @@ export class RecruiterController {
     });
   }
 );
+ public getCandidates = asyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const recruiterId = (req as any).user?.id || (req as any).user?._id;
+    if (!recruiterId) throw new BadRequestException("User ID missing");
+
+    const candidates = await this.recruiterService.getCandidates(recruiterId);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: "Candidates fetched successfully",
+      candidates,
+    });
+  }
+);
+
 }
 

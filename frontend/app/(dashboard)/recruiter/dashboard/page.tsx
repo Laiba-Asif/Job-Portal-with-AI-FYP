@@ -43,6 +43,7 @@ import Header from "../components/Header"
 import MetricCards from "../components/MetricCard"
 import QuickActions from "../components/QuickActions"
 import ProfileSummary from "../components/ProfileSummary"
+import TopCandidates from "../components/TopCandidates"
 
 export default function ClientDashboard() {
   
@@ -218,7 +219,7 @@ export default function ClientDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {candidates.slice(0, 3).map((candidate) => (
+                  {/* {candidates.slice(0, 3).map((candidate) => (
                     <div
                       key={candidate.id}
                       className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
@@ -283,7 +284,9 @@ export default function ClientDashboard() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
+                  <TopCandidates dashboard={true} />
+
                 </CardContent>
                 <CardFooter className="border-t border-gray-200 p-4">
                   <Button variant="outline" className="w-full bg-transparent">

@@ -1,6 +1,7 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document, Model,Types } from "mongoose";
 
 export interface IJob extends Document {
+   _id: Types.ObjectId;
   recruiterId: mongoose.Types.ObjectId;
   companyId: mongoose.Types.ObjectId;
 
@@ -82,8 +83,8 @@ const JobSchema: Schema<IJob> = new Schema(
 
     status: {
       type: String,
-      enum: ["draft", "published", "closed"],
-      default: "draft",
+      enum: [ "published", "closed"],
+      default: "published",
     },
 
     appliedCount: { type: Number, default: 0 },
