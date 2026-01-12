@@ -1,11 +1,16 @@
-"use client"
+"use client";
 
-import { use, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Progress } from "@/components/ui/progress"
+import { use, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Briefcase,
   Users,
@@ -38,16 +43,16 @@ import {
   Edit,
   Trash2,
   Sliders,
-} from "lucide-react"
-import Header from "../components/Header"
-import MetricCards from "../components/MetricCard"
-import QuickActions from "../components/QuickActions"
-import ProfileSummary from "../components/ProfileSummary"
-import TopCandidates from "../components/TopCandidates"
+} from "lucide-react";
+import MetricCards from "../components/MetricCard";
+import QuickActions from "../components/QuickActions";
+import ProfileSummary from "../components/ProfileSummary";
+import TopCandidates from "../components/TopCandidates";
+import { useJobs } from "@/hooks/useJobs";
+import Link from "next/link";
 
 export default function ClientDashboard() {
-  
-
+  const { jobsQuery } = useJobs();
   const jobPostings = [
     {
       id: 1,
@@ -64,149 +69,32 @@ export default function ClientDashboard() {
       shortlisted: 8,
       interviewed: 3,
     },
-    
-  ]
-
-  const candidates = [
-    {
-      id: 1,
-      name: "Alex Johnson",
-      title: "Senior Frontend Developer",
-      experience: "5 years",
-      skills: ["React", "TypeScript", "Node.js"],
-      match: 95,
-      location: "San Francisco, CA",
-      salary: "$140k",
-      status: "Interview Scheduled",
-      avatar: "/placeholder.svg?height=40&width=40",
-      education: "BS Computer Science, Stanford University",
-      lastActive: "2 hours ago",
-    },
-   
-  ]
-
-  const interviews = [
-    {
-      id: 1,
-      candidate: "Alex Johnson",
-      position: "Senior Frontend Developer",
-      date: "Today, 2:00 PM",
-      type: "Video Call",
-      status: "Upcoming",
-      notes: "Discuss previous experience with React and TypeScript",
-    },
-    
-  ]
-
-
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50">
-      
       {/* Main Content */}
       <main className={`px-2 transition-all duration-300 min-h-screen`}>
         <div className="px-4 py-6 max-w-7xl mx-auto">
           {/* Stats */}
-          <MetricCards/>
-
+          <MetricCards />
 
           {/* Main Dashboard Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
-              <QuickActions/>
-              {/* Active Job Postings */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-lg font-semibold">Active Job Postings</CardTitle>
-                    <CardDescription>Monitor your current job listings</CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    View All
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {jobPostings.map((job) => (
-                    <div
-                      key={job.id}
-                      className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">{job.title}</h3>
-                          <p className="text-gray-600 mb-2">{job.department}</p>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <span className="flex items-center">
-                              <MapPin className="w-4 h-4 mr-1" />
-                              {job.location}
-                            </span>
-                            <span className="flex items-center">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {job.posted}
-                            </span>
-                            <span className="flex items-center">
-                              <DollarSign className="w-4 h-4 mr-1" />
-                              {job.salary}
-                            </span>
-                          </div>
-                        </div>
-                        <Badge className="bg-green-100 text-green-800">{job.status}</Badge>
-                      </div>
-
-                      <div className="grid grid-cols-4 gap-2 mt-4">
-                        <div className="text-center p-2 bg-gray-50 rounded-md">
-                          <p className="text-sm font-medium text-gray-900">{job.applications}</p>
-                          <p className="text-xs text-gray-500">Applications</p>
-                        </div>
-                        <div className="text-center p-2 bg-gray-50 rounded-md">
-                          <p className="text-sm font-medium text-gray-900">{job.qualified}</p>
-                          <p className="text-xs text-gray-500">Qualified</p>
-                        </div>
-                        <div className="text-center p-2 bg-gray-50 rounded-md">
-                          <p className="text-sm font-medium text-gray-900">{job.shortlisted}</p>
-                          <p className="text-xs text-gray-500">Shortlisted</p>
-                        </div>
-                        <div className="text-center p-2 bg-gray-50 rounded-md">
-                          <p className="text-sm font-medium text-gray-900">{job.interviewed}</p>
-                          <p className="text-xs text-gray-500">Interviewed</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between mt-4">
-                        <Badge variant="outline" className="text-xs">
-                          {job.type}
-                        </Badge>
-                        <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="w-4 h-4 mr-1" />
-                            View
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="w-4 h-4 mr-1" />
-                            Edit
-                          </Button>
-                          <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-                <CardFooter className="border-t border-gray-200 p-4">
-                  <Button variant="outline" className="w-full bg-transparent">
-                    View All Job Postings
-                  </Button>
-                </CardFooter>
-              </Card>
+              <QuickActions />
 
               {/* Top Candidates */}
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">Top Candidates</CardTitle>
-                    <CardDescription>AI-recommended talent for your open positions</CardDescription>
+                    <CardTitle className="text-lg font-semibold text-blue-600">
+                      Top Candidates
+                    </CardTitle>
+                    <CardDescription className="text-blue-500">
+                      AI-recommended talent for your open positions
+                    </CardDescription>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button variant="outline" size="sm">
@@ -275,7 +163,7 @@ export default function ClientDashboard() {
                               <Button variant="ghost" size="sm">
                                 <Eye className="w-4 h-4" />
                               </Button>
-                              <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                                 <MessageSquare className="w-4 h-4 mr-1" />
                                 Contact
                               </Button>
@@ -286,11 +174,89 @@ export default function ClientDashboard() {
                     </div>
                   ))} */}
                   <TopCandidates dashboard={true} />
-
                 </CardContent>
                 <CardFooter className="border-t border-gray-200 p-4">
-                  <Button variant="outline" className="w-full bg-transparent">
+                  <Link href={'/recruiter/candidates'}   className="w-full text-center text-blue-600">
                     View All Candidates
+                  </Link>
+                </CardFooter>
+              </Card>
+
+              {/* Active Job Postings */}
+              <Card className="bg-white border-gray-200">
+                <CardHeader className="pb-2 flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg text-blue-600 font-semibold">
+                      Active Job Postings
+                    </CardTitle>
+                    <CardDescription className="text-blue-500">
+                      Monitor your current job listings
+                    </CardDescription>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-blue-500 text-white"
+                  >
+                    View All
+                  </Button>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {jobsQuery.data?.length === 0 && (
+                    <div className="text-center py-20">
+                      <p className="text-gray-500 text-lg">No jobs yet.</p>
+                      <button className="mt-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-400 text-white px-4 py-2 rounded hover:shadow">
+                        Create Job
+                      </button>
+                    </div>
+                  )}
+                  {jobsQuery.data?.map((job) => (
+                    <div
+                      key={job._id}
+                      className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">
+                            {job.title}
+                          </h3>
+                          <p className="text-sm text-gray-500">{job.role}</p>
+                          <p className="text-gray-600 mb-2">{job.department}</p>
+                          <p className="mt-1 text-gray-700 mb-3">
+                            {job.description.slice(0, 80)}...
+                          </p>
+                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                            <span className="flex items-center">
+                              <MapPin className="w-4 h-4 mr-1" />
+                              {job.location}
+                            </span>
+                            <span className="flex items-center">
+                              <Clock className="w-4 h-4 mr-1" />
+                              {job.createdAt}
+                            </span>
+                            {/* <span className="flex items-center">
+                              <DollarSign className="w-4 h-4 mr-1" />
+                              {job.salary}
+                            </span> */}
+                          </div>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">
+                          {job.status}
+                        </Badge>
+                      </div>
+
+                      
+
+                      
+                    </div>
+                  ))}
+                </CardContent>
+                <CardFooter className="border-t border-gray-200 p-4">
+                  <Button
+                    variant="outline"
+                    className="w-full bg-transparent bg-blue-500 text-white"
+                  >
+                    View All Job Postings
                   </Button>
                 </CardFooter>
               </Card>
@@ -299,69 +265,11 @@ export default function ClientDashboard() {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Quick Actions */}
-              <ProfileSummary/>
-             
-
-              {/* Upcoming Interviews */}
-              <Card className="bg-white border-gray-200">
-                <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="text-lg font-semibold">Upcoming Interviews</CardTitle>
-                    <CardDescription>Your scheduled candidate interviews</CardDescription>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    View All
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {interviews.map((interview) => (
-                    <div
-                      key={interview.id}
-                      className={`p-3 rounded-lg border ${
-                        interview.status === "Upcoming" ? "bg-blue-50 border-blue-100" : "border-gray-200"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge
-                          className={
-                            interview.type === "Video Call"
-                              ? "bg-purple-100 text-purple-800"
-                              : interview.type === "Phone Screen"
-                                ? "bg-blue-100 text-blue-800"
-                                : "bg-green-100 text-green-800"
-                          }
-                        >
-                          {interview.type}
-                        </Badge>
-                        <p className="text-xs font-medium text-gray-700">{interview.date}</p>
-                      </div>
-                      <h4 className="font-medium text-gray-900">{interview.candidate}</h4>
-                      <p className="text-sm text-gray-600">{interview.position}</p>
-                      <p className="text-xs text-gray-500 mt-1">{interview.notes}</p>
-                      <div className="flex items-center justify-between mt-3">
-                        <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                          Reschedule
-                        </Button>
-                        <Button
-                          size="sm"
-                          className={`text-xs ${
-                            interview.status === "Upcoming"
-                              ? "bg-green-600 hover:bg-green-700 text-white"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {interview.status === "Upcoming" ? "Join Call" : "View Details"}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
+              <ProfileSummary />
             </div>
           </div>
         </div>
       </main>
     </div>
-  )
+  );
 }

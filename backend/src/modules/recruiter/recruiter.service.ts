@@ -108,53 +108,73 @@ export class RecruiterService {
 
   // ai based candidates recommendation
 
-  public async getCandidates(recruiterId: string) {
-    if (!recruiterId) throw new BadRequestException("User ID missing");
-    const jobs = await JobModel.find({ recruiterId: recruiterId, status: "published" });
-     if (!jobs || jobs.length === 0) {
-      throw new BadRequestException("Recruiter has no posted jobs.");
+ public async getCandidates(recruiterId: string) {
+  if (!recruiterId) throw new BadRequestException("User ID missing");
+
+  const jobs = await JobModel.find({ recruiterId, status: "published" });
+  if (!jobs.length) throw new BadRequestException("Recruiter has no posted jobs.");
+
+  // PREPARE JOB BLOCKS
+  const jobBlocks = jobs.map(job => ({
+    jobId: job._id.toString(),
+    title: job.title,
+    text: [
+      `Title: ${job.title}`,
+      `Role: ${job.role || ""}`,
+      `Description: ${job.description || ""}`,
+      `Required Skills: ${job.requiredSkills?.join(", ") || ""}`,
+      `Skills: ${job.skills?.join(", ") || ""}`,
+      `Responsibilities: ${job.responsibilities?.join(", ") || ""}`,
+      `Requirements: ${job.requirements?.join(", ") || ""}`,
+    ].join("\n")
+  }));
+
+  // FETCH JOBSEEKERS
+  const jobseekers = await JobseekerProfileModel.find({ resumeParsed: true });
+
+  const seekerBlocks = jobseekers.map(profile => ({
+    seekerId: profile.userId.toString(),
+    resumeText: JSON.stringify(profile.parsedData || {})
+  }));
+
+  // CALL AI SERVICE
+  const res = await axios.post(
+    `${config.PARSER_URL}/match-candidates`,
+    { jobs: jobBlocks, jobseekers: seekerBlocks },
+    { headers: { "x-api-key": config.PARSER_API_KEY } }
+  );
+
+  const scores = res.data; // This contains repeated seekers from AI
+
+  // ============================================
+  // 🔥 FIX DUPLICATES — KEEP BEST SCORE PER SEEKER
+  // ============================================
+  const bestScores = new Map();
+
+  for (const item of scores) {
+    const existing = bestScores.get(item.seekerId);
+
+    if (!existing || item.score > existing.score) {
+      bestScores.set(item.seekerId, item);
     }
-
-     const jobBlocks = jobs.map(job => ({
-      jobId: job._id.toString(),
-      title: job.title,
-      text: `
-        Title: ${job.title}
-        Description: ${job.description}
-        Required Skills: ${job.requiredSkills?.join(", ") || ""}
-        Skills: ${job.skills?.join(", ") || ""}
-      `,
-      skills: job.requiredSkills ?? []
-    }));
-
-    const jobseekers = await JobseekerProfileModel.find({ resumeParsed: true });
-
-    const seekerBlocks = jobseekers.map(profile => ({
-      seekerId: profile.userId,
-      skills: profile.parsedData?.skills || [],
-      resumeText: JSON.stringify(profile.parsedData || {})
-    }));
-
-    const AI_URL = config.PARSER_URL;
-    const PARSER_API_KEY = config.PARSER_API_KEY;
-
-    const response = await axios.post(
-      `${AI_URL}/match-candidates`,
-      { jobs: jobBlocks, jobseekers: seekerBlocks },
-      { headers: { "x-api-key": PARSER_API_KEY } }
-    );
-
-    const scores = response.data; // { jobId, seekerId, score }
-
-    // Attach jobseeker details
-    const finalResults = scores.map((item: { seekerId: Types.ObjectId; }) => {
-      const seeker = jobseekers.find(s => s.userId === item.seekerId);
-      return {
-        ...item,
-        seekerProfile: seeker ? seeker.toObject() : null
-      };
-    });
-
-    return finalResults;
   }
+
+  // Convert Map → Array
+  const uniqueScores = Array.from(bestScores.values());
+
+  // ============================================
+  // 🔥 ATTACH FULL SEEKER PROFILE
+  // ============================================
+  const finalResults = uniqueScores.map(item => {
+    const seeker = jobseekers.find(s => s.userId.toString() === item.seekerId);
+    return {
+      ...item,
+      seekerProfile: seeker ? seeker.toObject() : null
+    };
+  });
+
+  return finalResults;
+}
+
+
 }

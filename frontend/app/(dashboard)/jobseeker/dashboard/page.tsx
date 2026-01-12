@@ -207,14 +207,14 @@ export default function JobSeekerDashboard() {
               <Card className="bg-white border-gray-200">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold">
+                    <CardTitle className="text-lg font-semibold text-blue-700">
                       Recommended Jobs
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-blue-500">
                       AI-matched opportunities based on your profile
                     </CardDescription>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="border border-blue-200 bg-blue-600 text-white">
                     View All
                   </Button>
                 </CardHeader>
@@ -222,11 +222,11 @@ export default function JobSeekerDashboard() {
                   {/* {recommendedJobs.slice(0, 3).map((job) => (
                     <div
                       key={job.id}
-                      className="p-4 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
+                      className="p-4 border border-blue-200 rounded-lg hover:shadow-sm transition-shadow"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">
+                          <h3 className="font-semibold text-blue-700 mb-1">
                             {job.title}
                           </h3>
                           <p className="text-gray-600 mb-2">{job.company}</p>
@@ -280,7 +280,7 @@ export default function JobSeekerDashboard() {
                           ) : (
                             <Button
                               size="sm"
-                              className="bg-green-600 hover:bg-green-700 text-white"
+                              className="border border-blue-200 bg-blue-600 text-white"
                             >
                               <Send className="w-4 h-4 mr-1" />
                               Apply

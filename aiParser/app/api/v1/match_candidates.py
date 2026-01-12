@@ -6,21 +6,17 @@ import os
 
 router = APIRouter()
 
-MODEL_NAME = os.getenv("SENTENCE_MODEL", "all-MiniLM-L6-v2")
-_model = SentenceTransformer(MODEL_NAME)
-
-SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", 0.65))
-
+# Same model used for job recommendations
+model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
 
 class JobItem(BaseModel):
     jobId: str
-    skills: List[str]
-
+    title: str
+    text: str   # full job data
 
 class SeekerItem(BaseModel):
     seekerId: str
-    skills: List[str]
-
+    resumeText: str  # full resume
 
 class MatchCandidateRequest(BaseModel):
     jobs: List[JobItem]
@@ -37,38 +33,34 @@ async def match_candidates(request: MatchCandidateRequest, x_api_key: str = Head
     if not request.jobs or not request.jobseekers:
         raise HTTPException(status_code=400, detail="Jobs and Jobseekers cannot be empty.")
 
-    scores = []
+    results = []
 
-    # Pre-encode seekers
+    # Pre-encode all resume embeddings
     seeker_embeddings = {
-        seeker.seekerId: _model.encode(
-            " ".join(seeker.skills), convert_to_tensor=True
-        )
+        seeker.seekerId: model.encode(seeker.resumeText, convert_to_tensor=True)
         for seeker in request.jobseekers
-        if seeker.skills
     }
 
     for job in request.jobs:
-        if not job.skills:
-            continue
-
-        job_text = " ".join(job.skills)
-        job_emb = _model.encode(job_text, convert_to_tensor=True)
+        job_embedding = model.encode(job.text, convert_to_tensor=True)
 
         for seeker in request.jobseekers:
             seeker_emb = seeker_embeddings.get(seeker.seekerId)
             if seeker_emb is None:
                 continue
 
-            similarity = util.cos_sim(job_emb, seeker_emb).item()
+            similarity = util.cos_sim(job_embedding, seeker_emb).item()
+            match_percentage = round(float(similarity) * 100, 2)
 
-            if similarity >= SIMILARITY_THRESHOLD:
-                scores.append({
+            # Keep matches above threshold
+            if match_percentage >= 20:
+                results.append({
                     "jobId": job.jobId,
                     "seekerId": seeker.seekerId,
-                    "score": round(similarity, 4)
+                    "matchPercentage": match_percentage
                 })
 
-    scores.sort(key=lambda x: x["score"], reverse=True)
+    # Sort by match score
+    results.sort(key=lambda x: x["matchPercentage"], reverse=True)
+    return results
 
-    return scores

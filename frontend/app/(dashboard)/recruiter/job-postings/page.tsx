@@ -1,21 +1,21 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useJobs } from "@/hooks/useJobs";
+import { SetStateAction, useRef, useState } from "react";
+import {  Job, useJobs } from "@/hooks/useJobs";
 import JobFormModal, { JobFormModalHandle } from "./components/JobForm";
 
 const JobPostings = () => {
   const { jobsQuery, createJob, updateJob, deleteJob } = useJobs();
   const modalRef = useRef<JobFormModalHandle>(null);
 
-  const [selectedJob, setSelectedJob] = useState(null);
+const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   const openCreate = () => {
     setSelectedJob(null);
     modalRef.current?.open();
   };
 
-  const openEdit = (job) => {
+  const openEdit = (job : Job ) => {
     setSelectedJob(job);
     modalRef.current?.open();
   };

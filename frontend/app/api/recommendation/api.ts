@@ -8,14 +8,44 @@ export interface JobRecommendation {
   description: string;
   skills?: string[];
   requiredSkills?: string[];
-  similarityScore: number;
+  matchPercentage: number;
+  companyName?: string;
+  hiringEmail?: string;
+  location?: string;
+  jobType?: string;
+  applied?: boolean;
+  salaryCurrency?: string;
+  salaryMin?: number;
+  salaryMax?: number;
+  openings?: number;
+  recruiterId?: string;
+  companyId?: {
+    _id: string;
+    userId: string;
+    companyName: string;
+    hiringEmail: string;
+  };
 }
+
 
 export interface CandidateRecommendation {
   jobId: string;
+  matchPercentage: number;
   seekerId: string;
-  score: number;
+  seekerProfile: {
+    parsedData: {
+      data: {
+        personal_info?: { name?: string };
+        job_title?: string;
+        skills?: string[];
+        years_of_experience?: number;
+      };
+    };
+    createdAt: string;
+    updatedAt: string;
+  };
 }
+
 
 export const getAllJobreccomendation = async (): Promise<JobRecommendation[]> => {
   const response = await API.get("/recommendations"); // use GET instead of POST

@@ -107,7 +107,7 @@ export default function RecruiterProfileSummary() {
           </Link>
 
           <Link href="/recruiter/jobs">
-            <Button className="w-full border border-gray-300 text-gray-700 rounded-full">
+            <Button className="w-full border border-gray-300 text-white rounded-full">
               View Jobs
             </Button>
           </Link>
